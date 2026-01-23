@@ -1,0 +1,13 @@
+# depslib dependency file v1.0
+1769173858 source:/home/semka/Desktop/Code/Red_App/src/NetworkInterface.cpp
+	"NetworkInterface.h"
+	<vector>
+	<string>
+	<fstream>
+	<filesystem>
+	<iostream>
+
+1768975611 /home/semka/Desktop/Code/Red_App/include/NetworkInterface.h
+	<vector>
+	<string>
+
