@@ -10,7 +10,6 @@ struct NetworkInterface
     std::string mac_address;
     bool on;
     std::string ip;
-    int mtu;
 };
 std::vector<NetworkInterface> scanNetworkInterface();
 

@@ -3,9 +3,21 @@
 #include <string>
 #include <fstream>
 #include <filesystem>
-#include <iostream>
 using namespace std;
 namespace fs = std::filesystem;
+string Cmd(const string& command) {
+    char buff[128];
+    string out;
+
+    FILE* pipe = popen(command.c_str(), "r");
+    if (!pipe) return "Ошибка выполнения команды!";
+
+    while (fgets(buff, sizeof(buff), pipe)!=nullptr) {out+=buff;}
+
+    pclose(pipe);
+    return out;
+}
+
 vector<NetworkInterface> scanNetworkInterface()
 {
     vector<NetworkInterface> interfaces;
@@ -24,22 +36,14 @@ vector<NetworkInterface> scanNetworkInterface()
         }
         ifstream index_file(dir.path() / "ifindex");
         if (index_file) {index_file>>interface.index;}
-        fstream mtu_file(dir.path() / "mtu");
-        if (mtu_file) {mtu_file>>interface.mtu;}
-        fstream devtype(dir.path() / "uevent");
-        if (devtype) {
-            string x((std::istreambuf_iterator<char>(devtype)),
-            std::istreambuf_iterator<char>());
-            if (x.find("DEVTYPE=")!=string::npos){
-                interface.type=x.substr(x.find("DEVTYPE=")+8, x.find('\n', x.find("DEVTYPE=")+8)-8);;
-            }
 
-        }
+        string type = Cmd("nmcli -t -f  DEVICE,TYPE dev | grep -i \"^"+interface.name+"\"");
+        interface.type= type.substr(type.find(":")+1);
+
+        string ip =Cmd("ip -4 -br a s "+interface.name);
+        interface.ip=ip.substr((ip.rfind("   "))+3);
+
+        interfaces.push_back(interface);
     }
-}
-int main()
-{
-    vector<NetworkInterface> scan=scanNetworkInterface();
-    cout<<scan[0].type;
-return 0;
+    return interfaces;
 }
