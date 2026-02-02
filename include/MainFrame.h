@@ -9,7 +9,12 @@ public:
     MainFrame(const wxString& title);
 
 private:
-    wxPanel* panel;
+    void CreateMenu();
+    void CreateTest();
+    void SetupSizers();
+    void BindEvent();
+    wxPanel* menu;
+    wxPanel* test;
 };
 
 #endif // MAINFRAME_H
