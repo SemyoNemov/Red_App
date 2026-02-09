@@ -4,5 +4,5 @@
 *.depend
 *.o
 obj/
-bin/
+bin/Debug
 

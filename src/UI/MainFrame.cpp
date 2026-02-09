@@ -1,16 +1,21 @@
 #include "MainFrame.h"
 #include "NetworkInterface.h"
-#include <ButtonMenu.h>
+#include "ButtonMenu.h"
+#include "Ids.h"
 #include <wx/wx.h>
+#include "MainMenuPanel.h"
+#include "NetworkInterfacePanel.h"
 #include <vector>
 #include <string>
+#include <map>
+
 
 MainFrame::MainFrame(const wxString& title) : wxFrame(nullptr, wxID_ANY, title)
 {
     SetMinSize(wxSize(1000, 600));
 
     CreateMenu();
-    CreateTest();
+    CreateSections();
     SetupSizers();
     BindEvent();
 }
@@ -23,26 +28,31 @@ void MainFrame::CreateMenu()
     wxBoxSizer* menuSizer = new wxBoxSizer(wxVERTICAL);
 
     menuSizer ->AddSpacer(10);
-    ButtonMenu* btnMainMenu = new ButtonMenu(menu, wxID_ANY, wxT("Главное меню"));
-    ButtonMenu* btnNetInterface = new ButtonMenu(menu, wxID_ANY, wxT("Сетевые интерфейсы"));
-    ButtonMenu* btn2 = new ButtonMenu(menu, wxID_ANY, wxT("Раздел 2"));
-    ButtonMenu* btn3 = new ButtonMenu(menu, wxID_ANY, wxT("Раздел 3"));
+    ButtonMenu* btnMainMenu = new ButtonMenu(menu, ID_MAIN, wxT("Главное меню"));
+    ButtonMenu* btnNetInterface = new ButtonMenu(menu, ID_NET, wxT("Сетевые интерфейсы"));
+    menuButtons = {btnMainMenu, btnNetInterface};
 
-    menuSizer ->Add(btnMainMenu, 0, wxEXPAND);
-    menuSizer ->Add(btnNetInterface, 0, wxEXPAND);
-    menuSizer ->Add(btn2, 0, wxEXPAND);
-    menuSizer ->Add(btn3, 0, wxEXPAND);
+    for (auto* btn : menuButtons) {menuSizer->Add(btn, 0, wxEXPAND);}
     menu-> SetSizer(menuSizer);
-    btn2->SetActive(1); //Тест активного раздела
+    btnMainMenu->SetActive(1);
 }
-void MainFrame::CreateTest()
+void MainFrame::CreateSections()
 {
-    test = new wxPanel(this, wxID_ANY);
-    test -> SetBackgroundColour(wxColour(0, 153, 0));
+    content = new wxPanel(this, wxID_ANY);
+    wxBoxSizer* contentSizer = new wxBoxSizer(wxVERTICAL);
+    content->SetSizer(contentSizer);
 
-    wxBoxSizer* testSizer = new wxBoxSizer(wxVERTICAL);
+    sections[ID_MAIN] = new MainMenuPanel(content);
+    sections[ID_NET] = new NetworkInterfacePanel(content);
 
-    test-> SetSizer(testSizer);
+    for (auto& [id, panel] : sections)
+    {
+        contentSizer->Add(panel, 1, wxEXPAND);
+        panel->Hide();
+    }
+
+    SwitchSection(ID_MAIN);
+
 }
 
 void MainFrame::SetupSizers()
@@ -56,13 +66,38 @@ void MainFrame::SetupSizers()
     separator->SetBackgroundColour(wxColour(100, 100, 100));
     mainSizer->Add(separator, 0, wxEXPAND | wxTOP | wxBOTTOM, 0);
 
-    mainSizer->Add(test, 4, wxEXPAND | wxALL, 0);
+    mainSizer->Add(content, 4, wxEXPAND | wxALL, 0);
 
     SetSizer(mainSizer);
     menu->SetMinSize(wxSize(250, -1));
+    Layout();
+}
+
+void MainFrame::SwitchSection(int id)
+{
+    if (currentSection) {currentSection->Hide();}
+
+    auto it = sections.find(id);
+    if (it==sections.end()) {return;}
+
+    currentSection = it->second;
+    currentSection -> Show();
+
+    content->Layout();
+}
+void MainFrame::MenuClick(wxCommandEvent& evt)
+{
+    int id = evt.GetId();
+    SwitchSection(id);
+    MenuButtonStatus(id);
+}
+
+void MainFrame::MenuButtonStatus(int id)
+{
+       for (auto* btn : menuButtons) {btn->SetActive(btn->GetId() == id);}
 }
 
 void MainFrame::BindEvent()
 {
-
+   for (auto* btn : menuButtons) {btn->Bind(wxEVT_BUTTON, &MainFrame::MenuClick, this);}
 }
