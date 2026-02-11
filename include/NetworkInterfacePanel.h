@@ -12,8 +12,10 @@ class NetworkInterfacePanel : public wxPanel
     private:
         wxListCtrl* listInterfaces;
         wxButton* startScan;
+        wxButton* btnExport;
         void BindEvent();
         void StartScan(wxCommandEvent& evt);
+        void Export(wxCommandEvent& evt);
         void InsertListInterface(const std::vector<NetworkInterface>& interfaces);
         void SizerList();
 };

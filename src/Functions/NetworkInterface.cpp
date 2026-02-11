@@ -41,7 +41,7 @@ vector<NetworkInterface> scanNetworkInterface()
         interface.type= type.substr(type.find(":")+1);
 
         string ip =Cmd("ip -4 -br a s "+interface.name);
-        interface.ip=ip.substr((ip.rfind("   "))+3);
+        interface.ip=(ip.empty() || ip.rfind("   ") == string::npos) ? "No IP Address" : ip.substr((ip.rfind("   "))+3);
 
         interfaces.push_back(interface);
     }

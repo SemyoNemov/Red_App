@@ -19,6 +19,7 @@ private:
     void MenuClick(wxCommandEvent& evt);
     void BindEvent();
     wxPanel* menu = nullptr;
+    wxCheckBox* rootCheckBox;
     wxPanel* content= nullptr;
     std::map<int, wxPanel*> sections;
     wxPanel* currentSection= nullptr;

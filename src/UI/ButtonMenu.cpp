@@ -3,11 +3,7 @@
 #include <wx/tokenzr.h>
 #include <wx/dcbuffer.h>
 
-ButtonMenu::ButtonMenu(wxWindow* parent,
-                       wxWindowID id,
-                       const wxString& label)
-    : wxPanel(parent, id),
-      m_label(label)
+ButtonMenu::ButtonMenu(wxWindow* parent, wxWindowID id, const wxString& label) : wxPanel(parent, id), m_label(label)
 {
     SetBackgroundStyle(wxBG_STYLE_PAINT);
     UpdateColors();
@@ -32,9 +28,9 @@ void ButtonMenu::UpdateColors()
     m_bg        = base;
     m_bgHover   = base.ChangeLightness(90);
 
-    m_text       = wxColor(0, 0, 0);
-    m_textHover  = wxColor(255, 0, 0);
-    m_textActive = wxColor(0, 255, 0);
+    m_text       = wxColor(87,87,87);
+    m_textHover  = wxColor(0,0,0);
+    m_textActive = wxColor(205,61,60);
 }
 
 void ButtonMenu::OnMouseEnter(wxMouseEvent&)

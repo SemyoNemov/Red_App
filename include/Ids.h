@@ -4,7 +4,10 @@
 enum
 {
     ID_MAIN = wxID_HIGHEST +1,
-    ID_NET
+    ID_NET,
+    ID_PORTS,
+
+    ID_SETTINGS
 };
 
 

@@ -3,6 +3,7 @@
 *.layout
 *.depend
 *.o
+*.xml
 obj/
 bin/Debug
 
