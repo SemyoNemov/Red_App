@@ -33,7 +33,7 @@ void MainFrame::CreateMenu()
     menuSizer ->AddSpacer(10);
     ButtonMenu* btnMainMenu = new ButtonMenu(menu, ID_MAIN, wxT("Главное меню"));
     ButtonMenu* btnNetInterface = new ButtonMenu(menu, ID_NET, wxT("Сетевые интерфейсы"));
-    ButtonMenu* btnScanPorts = new ButtonMenu(menu, ID_PORTS, wxT("Порты"));
+    ButtonMenu* btnScanPorts = new ButtonMenu(menu, ID_PORTS, wxT("Сетевые порты"));
     ButtonMenu* btnSettings = new ButtonMenu(menu, ID_SETTINGS, wxT("Настройки"));
     wxCheckBox* rootCheckBox = new wxCheckBox(menu, wxID_ANY, wxT("Режим cуперпользователя"));
     rootCheckBox->SetFont(MF::GetDefaultFont());

@@ -4,7 +4,7 @@
 
 MainMenuPanel::MainMenuPanel(wxWindow* parent) : wxPanel(parent)
 {
-    SetBackgroundColour(wxColour(200, 200, 200));
+     SetBackgroundColour(wxColour(250, 250, 250));
     wxBoxSizer* panelSizer = new wxBoxSizer(wxVERTICAL);
     wxStaticText* text = new wxStaticText(this, wxID_ANY, wxT("Главное меню.\n(в разработке)"), wxDefaultPosition, wxDefaultSize, wxALIGN_CENTRE_HORIZONTAL);
     text->SetFont(MF::GetTitleFont());

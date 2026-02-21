@@ -7,7 +7,7 @@
 
 NetworkInterfacePanel::NetworkInterfacePanel(wxWindow* parent) : wxPanel(parent)
 {
-    SetBackgroundColour(wxColour(255, 255, 255));
+    SetBackgroundColour(wxColour(250, 250, 250));
 
     wxBoxSizer* panelSizer = new wxBoxSizer(wxVERTICAL);
     wxStaticText* titleText = new wxStaticText(this, wxID_ANY, wxT("Сканер сетевых интерфейсов"));
@@ -66,33 +66,29 @@ void NetworkInterfacePanel::InsertListInterface(const std::vector<NetworkInterfa
         for (const auto& iface : interfaces)
         {
         long row = listInterfaces->InsertItem(listInterfaces->GetItemCount(),
-                                             wxString::Format("%d", iface.index));
+        wxString::Format("%d", iface.index));
         listInterfaces->SetItem(row, 1, wxString::FromUTF8(iface.name));
         listInterfaces->SetItem(row, 2, wxString::FromUTF8(iface.type));
         listInterfaces->SetItem(row, 3, wxString::FromUTF8(iface.ip));
         listInterfaces->SetItem(row, 4, wxString::FromUTF8(iface.mac_address));
         listInterfaces->SetItem(row, 5, iface.on ? wxT("Up") : wxT("Down"));
         }
-        SizerList();
+    SizerList();
 }
 void NetworkInterfacePanel::SizerList()
 {
-    listInterfaces->SetColumnWidth(0, 45);
-    listInterfaces->SetColumnWidth(1, 150);
-    listInterfaces->SetColumnWidth(2, 100);
-    listInterfaces->SetColumnWidth(3, 150);
-    listInterfaces->SetColumnWidth(4, 150);
+    int colCount = 6;
+    for (int col = 0; col < colCount; ++col)
+    {
+        listInterfaces->SetColumnWidth(col, wxLIST_AUTOSIZE);
+        int contentWidth = listInterfaces->GetColumnWidth(col);
 
-    int totalWidth = listInterfaces->GetClientSize().GetWidth();
-    int usedWidth = 0;
-    for (int i = 0; i < 5; ++i) {
-        usedWidth += listInterfaces->GetColumnWidth(i);
-    }
-    int lastColumnWidth = totalWidth - usedWidth - 20;
-    if (lastColumnWidth < 80) {
-        lastColumnWidth = 80;
-    }
-    listInterfaces->SetColumnWidth(5, lastColumnWidth);
+        listInterfaces->SetColumnWidth(col, wxLIST_AUTOSIZE_USEHEADER);
+        int headerWidth = listInterfaces->GetColumnWidth(col);
 
+        listInterfaces->SetColumnWidth(col, wxMax(contentWidth, headerWidth));
+    }
+    listInterfaces->Refresh();
+    listInterfaces->Update();
 }
 

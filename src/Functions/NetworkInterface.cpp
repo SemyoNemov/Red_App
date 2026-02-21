@@ -3,9 +3,10 @@
 #include <string>
 #include <fstream>
 #include <filesystem>
+#include <algorithm>
 using namespace std;
 namespace fs = std::filesystem;
-string Cmd(const string& command) {
+static string Cmd(const string& command) {
     char buff[128];
     string out;
 
@@ -44,6 +45,10 @@ vector<NetworkInterface> scanNetworkInterface()
         interface.ip=(ip.empty() || ip.rfind("   ") == string::npos) ? "No IP Address" : ip.substr((ip.rfind("   "))+3);
 
         interfaces.push_back(interface);
+
+        sort(interfaces.begin(), interfaces.end(), [](const NetworkInterface& a, const NetworkInterface& b) {
+            return a.index < b.index;
+        });
     }
     return interfaces;
 }
